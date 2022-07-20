@@ -1,5 +1,11 @@
+import random
 class Creature(object):
     """Basic model for creatures"""
+    total = 0
+
+    @staticmethod
+    def status():
+        print("Overall number of Creatues is", Creature.total)
 
     def __init__(self, type:str, name:str, health:int, damage:int, defense:int, movement_speed:int):
         """Function inits primary atributes for new creature
@@ -19,6 +25,7 @@ class Creature(object):
         self.defense = defense
         self.movement_speed = movement_speed
         self.is_alive = True
+        Creature.total += 1
 
     def dead(self):
         """Status that Creature cannot make any actions due to health points are 0"""        
@@ -59,12 +66,32 @@ class Creature(object):
 class Demon(Creature):
     """Basic model for creature - Demon"""
 
-    def __init__(self, name, health, damage, defense, movement_speed):
-        super().__init__("Demon", name, health, damage, defense, movement_speed)
-        self.atributes = ("Demon", name, health, damage, defense, movement_speed)
+    def __init__(self, name:str, health:int, damage:int, defense:int, movement_speed:int):
+        super().__init__(type = "Demon", name = name, health = health, damage= damage, defense = defense, movement_speed = movement_speed)
 
-    def fireball(self):
-        pass
+    def fireball(self, target:object):
+        """Skills that deals fire damage to target which ingores target's armor
+
+        Args:
+            target (object): Creature who's health ponts will be decreased
+        """        
+        if target.health >= 1:
+            fire_attack = self.damage + random.randint(20,35)
+            print(self.name, "use special ability 'fireball' on", target.name, "and deals", fire_attack, "fire damage", "(ignores", target.name + "'s armor)")
+            if target.health <= 0:
+               target.dead()
+
+    def roar(self, target:object):
+        """Skill that allow Demon to decease target's armor by 5 points
+
+        Args:
+            target (object): Creature who's armor will be decreased
+        """        
+        target.defense -= 5
+        print(self.name, "use special ability 'roar' on", target.name, "and reduce it's defense by 5 points")
+
+class statistics(object):
+    """Object gather statistics from all objects"""
 
 Demon1 = Demon("Krzsztof", 350, 35,20,5)
 Demon2 = Demon("Andrzej", 350, 35,20,5)
@@ -72,6 +99,9 @@ print(Demon2.health)
 Demon1.attack(Demon2)
 print(Demon2.health)
 Demon1.attack(Demon2)
-for i in range(22):
+for i in range(18):
     i = Demon1.attack(Demon2)
+Demon1.fireball(Demon2)
+Demon1.roar(Demon2)
 Demon2.statistic()
+Creature.status()
