@@ -3,10 +3,6 @@ class Creature(object):
     """Basic model for creatures"""
     total = 0
 
-    @staticmethod
-    def status():
-        print("Overall number of Creatues is", Creature.total)
-
     def __init__(self, type:str, name:str, health:int, damage:int, defense:int, movement_speed:int):
         """Function inits primary atributes for new creature
 
@@ -54,12 +50,6 @@ class Creature(object):
     def block(self, damage_taken):
         pass
 
-    def statistic(self):
-        a = ["Type:", "Name:", "Health:", "Damage:", "Defense:", "Movement_speed:"]
-        b = [self.type, self.name, self.health, self.damage, self.defense, self.movement_speed]
-        for i, j in zip(a, b): 
-            print(i,j)
- 
     def position(self):
         pass
 
@@ -86,22 +76,40 @@ class Demon(Creature):
 
         Args:
             target (object): Creature who's armor will be decreased
-        """        
+        """           
         target.defense -= 5
         print(self.name, "use special ability 'roar' on", target.name, "and reduce it's defense by 5 points")
 
 class statistics(object):
-    """Object gather statistics from all objects"""
+    """Class which gathers all object's data"""
 
+
+    @staticmethod
+    def status():
+        print("Overall number of Creatues is", Creature.total)
+
+    def current_stats(creature:object):
+        """Current creature's basic stats
+
+        Args:
+            creature (_type_): Creature which stat's will be shown
+        """        
+        a = ["Type:", "Name:", "Health:", "Damage:", "Defense:", "Movement_speed:"]
+        b = [creature.type, creature.name, creature.health, creature.damage, creature.defense, creature.movement_speed]
+        for i, j in zip(a, b): 
+            print(i,j)
+
+#Main program
 Demon1 = Demon("Krzsztof", 350, 35,20,5)
 Demon2 = Demon("Andrzej", 350, 35,20,5)
 print(Demon2.health)
 Demon1.attack(Demon2)
 print(Demon2.health)
 Demon1.attack(Demon2)
-for i in range(18):
+for i in range(2):
     i = Demon1.attack(Demon2)
 Demon1.fireball(Demon2)
 Demon1.roar(Demon2)
-Demon2.statistic()
-Creature.status()
+
+statistics.current_stats(Demon2)
+statistics.status()
