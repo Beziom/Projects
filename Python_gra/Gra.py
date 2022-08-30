@@ -113,3 +113,8 @@ Demon1.roar(Demon2)
 
 statistics.current_stats(Demon2)
 statistics.status()
+
+#To do:
+#1* Try to what method should i use to count attacks (uses ability)
+#2* Adding Mana inficator
+#3* Check PyGame - maybe there are solution idea for extension
