@@ -1,7 +1,12 @@
 import random
 class Creature(object):
     """Basic model for creatures"""
-    total = 0
+
+    number_of_creatures = 0
+    number_of_attacks = 0
+    number_of_abilities = 0
+    damage_dealt_by_attacks = 0
+    damage_dealt_by_abilities = 0
 
     def __init__(self, type:str, name:str, health:int, damage:int, defense:int, movement_speed:int):
         """Function inits primary atributes for new creature
@@ -21,7 +26,7 @@ class Creature(object):
         self.defense = defense
         self.movement_speed = movement_speed
         self.is_alive = True
-        Creature.total += 1
+        Creature.number_of_creatures += 1
 
     def dead(self):
         """Status that Creature cannot make any actions due to health points are 0"""        
@@ -43,7 +48,10 @@ class Creature(object):
         """                
         if target.health >= 1:
             target.health = target.health -self.damage + target.defense
+            self.number_of_attacks += 1 # Is it the best idea to add statistic solution here (or it should be done in classs)
+            self.damage_dealt_by_attacks += self.damage - target.defense
             print(self.name, "attacks", target.name, "and deals", self.damage - self.defense, "damage", "(" + str(self.defense), "blocked)")
+
             if target.health <= 0:
                target.dead()
 
@@ -67,6 +75,8 @@ class Demon(Creature):
         """        
         if target.health >= 1:
             fire_attack = self.damage + random.randint(20,35)
+            self.number_of_abilities += 1
+            self.damage_dealt_by_abilities += fire_attack
             print(self.name, "use special ability 'fireball' on", target.name, "and deals", fire_attack, "fire damage", "(ignores", target.name + "'s armor)")
             if target.health <= 0:
                target.dead()
@@ -78,15 +88,18 @@ class Demon(Creature):
             target (object): Creature who's armor will be decreased
         """           
         target.defense -= 5
+        self.number_of_abilities += 1 # Is it the best idea to add statistic solution here (or it should be done in classs)
         print(self.name, "use special ability 'roar' on", target.name, "and reduce it's defense by 5 points")
 
 class statistics(object):
     """Class which gathers all object's data"""
-
+    number_of_creatures = 0
+    number_of_attacks = 0
+    number_of_abilities = 0
 
     @staticmethod
     def status():
-        print("Overall number of Creatues is", Creature.total)
+        print("Overall number of Creatues is", Creature.number_of_creatures)
 
     def current_stats(creature:object):
         """Current creature's basic stats
@@ -94,14 +107,16 @@ class statistics(object):
         Args:
             creature (_type_): Creature which stat's will be shown
         """        
-        a = ["Type:", "Name:", "Health:", "Damage:", "Defense:", "Movement_speed:"]
-        b = [creature.type, creature.name, creature.health, creature.damage, creature.defense, creature.movement_speed]
+        a = ["Type:", "Name:", "Health:", "Damage:", "Defense:", "Movement_speed:", "Number_of_attacks:", "Damage_dealt_by_attacks:", "Number_of_used_abilities:", "Damage_dealt_by_abilities"]
+        b = [creature.type, creature.name, creature.health, creature.damage, creature.defense, creature.movement_speed, creature.number_of_attacks, creature.damage_dealt_by_attacks, creature.number_of_abilities, creature.damage_dealt_by_abilities]
         for i, j in zip(a, b): 
             print(i,j)
 
 #Main program
 Demon1 = Demon("Krzsztof", 350, 35,20,5)
 Demon2 = Demon("Andrzej", 350, 35,20,5)
+
+
 print(Demon2.health)
 Demon1.attack(Demon2)
 print(Demon2.health)
@@ -111,10 +126,11 @@ for i in range(2):
 Demon1.fireball(Demon2)
 Demon1.roar(Demon2)
 
+statistics.current_stats(Demon1)
 statistics.current_stats(Demon2)
 statistics.status()
 
 #To do:
-#1* Try to what method should i use to count attacks (uses ability)
+#1* Try to what method should i use to count attacks (uses ability) - done
 #2* Adding Mana inficator
 #3* Check PyGame - maybe there are solution idea for extension
