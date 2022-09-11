@@ -1,4 +1,5 @@
 import random
+
 class Creature(object):
     """Basic model for creatures"""
 
@@ -91,7 +92,26 @@ class Demon(Creature):
         self.number_of_abilities += 1 # Is it the best idea to add statistic solution here (or it should be done in classs)
         print(self.name, "use special ability 'roar' on", target.name, "and reduce it's defense by 5 points")
 
-class statistics(object):
+class Vampire(Creature):
+    """_Basic model fo creature Vampire"""   
+    
+    def __init__(self, name: str, health: int, damage: int, defense: int, movement_speed: int):
+        super().__init__(type = "Vampire", name = name, health = health, damage = damage, defense = defense, movement_speed = movement_speed)
+    
+    def attack(self, target: object):
+        super().attack(target)
+        self.health += self.damage - target.defense
+
+    def consumption(self, target:object):
+        life_steal_damage = random.randint(10,15)
+        if target.health <= life_steal_damage:
+               target.dead()
+        else:
+            target.health -= life_steal_damage
+            self.health += life_steal_damage
+            print(self.name, "use special ability 'consumption' on", target.name, "and steals", life_steal_damage, "health points from", target.name)
+
+class Statistics(object):
     """Class which gathers all object's data"""
     number_of_creatures = 0
     number_of_attacks = 0
@@ -112,25 +132,39 @@ class statistics(object):
         for i, j in zip(a, b): 
             print(i,j)
 
+class Inventory(object):
+
+    Creature.inventory = {"health_potion":5}
+    all_items = {"health_potion":"Restore 25 health points"}
+    def equipment(Creature:object):
+        for key,value in Creature.inventory.items():
+            print(key,value)
+        pass    
+
+    def add_item(Creature:object):
+
+        added_item = input("What item do You want to add?:")
+        Creature.inventory[added_item] += 1
+
 #Main program
 Demon1 = Demon("Krzsztof", 350, 35,20,5)
 Demon2 = Demon("Andrzej", 350, 35,20,5)
+Vampire1 = Vampire("Kamil", 400, 25, 20, 10)
 
-
-print(Demon2.health)
 Demon1.attack(Demon2)
-print(Demon2.health)
-Demon1.attack(Demon2)
-for i in range(2):
-    i = Demon1.attack(Demon2)
 Demon1.fireball(Demon2)
 Demon1.roar(Demon2)
+Vampire1.attack(Demon1)
+Vampire1.consumption(Demon1)
 
-statistics.current_stats(Demon1)
-statistics.current_stats(Demon2)
-statistics.status()
-
+Statistics.current_stats(Vampire1)
+Statistics.current_stats(Demon1)
+Statistics.current_stats(Demon2)
+Inventory.equipment(Demon1)
+Inventory.add_item(Demon1)
+Inventory.equipment(Demon1)
 #To do:
 #1* Try to what method should i use to count attacks (uses ability) - done
-#2* Adding Mana inficator
-#3* Check PyGame - maybe there are solution idea for extension
+#2* Adding Mana inficator 
+#3* Check PyGame - maybe there are solution idea for extension --inventory
+#4* Best practice: Where should be database for all items (if - when something is not in the game)
