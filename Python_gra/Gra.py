@@ -1,5 +1,5 @@
 import random
-
+from all_items import all_items_game
 class Creature(object):
     """Basic model for creatures"""
 
@@ -133,9 +133,8 @@ class Statistics(object):
             print(i,j)
 
 class Inventory(object):
-
-    Creature.inventory = {"health_potion":5}
-    all_items = {"health_potion":"Restore 25 health points"}
+    Creature.inventory = {"health_potion":5, "mana_potion":3}
+    
     def equipment(Creature:object):
         for key,value in Creature.inventory.items():
             print(key,value)
