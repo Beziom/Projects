@@ -1,5 +1,7 @@
 import random
 from all_items import all_items_game
+from all_items import all_items
+
 class Creature(object):
     """Basic model for creatures"""
 
@@ -99,10 +101,20 @@ class Vampire(Creature):
         super().__init__(type = "Vampire", name = name, health = health, damage = damage, defense = defense, movement_speed = movement_speed)
     
     def attack(self, target: object):
+        """Inherited method from Creature with lifesteal effect
+
+        Args:
+            target (object): Creature which health points will be decreased and stolen
+        """        
         super().attack(target)
         self.health += self.damage - target.defense
 
     def consumption(self, target:object):
+        """Ability which ignores target's armor and steal his health points
+
+        Args:
+            target (object): Creature which health points will be decreased and stolen
+        """        
         life_steal_damage = random.randint(10,15)
         if target.health <= life_steal_damage:
                target.dead()
@@ -113,6 +125,7 @@ class Vampire(Creature):
 
 class Statistics(object):
     """Class which gathers all object's data"""
+
     number_of_creatures = 0
     number_of_attacks = 0
     number_of_abilities = 0
@@ -133,37 +146,65 @@ class Statistics(object):
             print(i,j)
 
 class Inventory(object):
-    Creature.inventory = {"health_potion":5, "mana_potion":3}
+    """Class which manage all items in game like storing, adding, deleting"""    
+
+    Creature.inventory = {"Health Potion":5, "Mana Potion":3}
     
+    def items_in_game():
+        """Method which provide all items in game with description saved in 'all_items_game.csv'"""        
+        all_items_game()
+
     def equipment(Creature:object):
+        """Method describes Creature's inventory wchich can be used by this Creature
+
+        Args:
+            Creature (object): Specific Creature's inventory
+        """        
         for key,value in Creature.inventory.items():
             print(key,value)
         pass    
 
     def add_item(Creature:object):
+        """Method wchich allows to add specific items to Creature's inventory
+           Method is using all_items_game.csv to check if item is available in game
 
-        added_item = input("What item do You want to add?:")
-        Creature.inventory[added_item] += 1
+        Args:
+            Creature (object): Creature's who's inventory will be changed
+        """        
+        added_item = input("If You are not sure what to type, write 'check_items'.\nWhat item do You want to add?:") 
+        if added_item == "check_items":
+            all_items_game()
+        elif added_item not in all_items:
+            print("You cannot add this items, it is not in the game!")
+        else:
+            Creature.inventory[added_item] += 1
+            print(added_item, "has been added to", Creature.name, "'s inventory")
 
-#Main program
+#Main program - init monesters
 Demon1 = Demon("Krzsztof", 350, 35,20,5)
 Demon2 = Demon("Andrzej", 350, 35,20,5)
 Vampire1 = Vampire("Kamil", 400, 25, 20, 10)
 
-Demon1.attack(Demon2)
-Demon1.fireball(Demon2)
-Demon1.roar(Demon2)
-Vampire1.attack(Demon1)
-Vampire1.consumption(Demon1)
+#Attacks
+# Demon1.attack(Demon2)
+# Demon1.fireball(Demon2)
+# Demon1.roar(Demon2)
+# Vampire1.attack(Demon1)
+# Vampire1.consumption(Demon1)
 
+#Stats
 Statistics.current_stats(Vampire1)
 Statistics.current_stats(Demon1)
 Statistics.current_stats(Demon2)
+
+##Inventory
 Inventory.equipment(Demon1)
 Inventory.add_item(Demon1)
 Inventory.equipment(Demon1)
+
 #To do:
 #1* Try to what method should i use to count attacks (uses ability) - done
 #2* Adding Mana inficator 
-#3* Check PyGame - maybe there are solution idea for extension --inventory
+#3* Check PyGame - maybe there are solution idea for extension - inventory - done
 #4* Best practice: Where should be database for all items (if - when something is not in the game)
+#5*
