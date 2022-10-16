@@ -1,3 +1,4 @@
+from numpy import squeeze
 import pandas
 
 def all_items_game():
@@ -7,6 +8,7 @@ def all_items_game():
     global all_items
     all_items = data.to_dict()
     for key,values in all_items.items():
-        print({key:values})
+        print(f'ITEM: {key} - DESCRIPTION: {values}')
+        print()
     return all_items
 all_items_game()

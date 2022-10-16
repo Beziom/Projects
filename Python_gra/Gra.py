@@ -1,8 +1,10 @@
 import random
-from urllib.parse import uses_fragment
+
 from all_items import all_items_game
 from all_items import all_items
 
+game_is_active = True
+monster_list = []
 class Creature(object):
     """Basic model for creatures"""
 
@@ -22,7 +24,7 @@ class Creature(object):
             damage (int): Number of health point which will be decresed from target
             defense (int): How many damage creature will absorb
             movement_speed (int): Number of spaces which creature can step on in 1 tour
-            mana (int): Soorce or using abilities
+            mana (int): Source for using abilities
         """                      
         self.type = type
         self.name = name
@@ -52,7 +54,7 @@ class Creature(object):
         Args:
             target (object): Creature on who attack action will affect
         """                
-        if target.health >= 1:
+        if target.health >= 1 and self.is_alive:
             target.health = target.health -self.damage + target.defense
             self.number_of_attacks += 1 # Is it the best idea to add statistic solution here (or it should be done in classs)
             self.damage_dealt_by_attacks += self.damage - target.defense
@@ -79,10 +81,11 @@ class Demon(Creature):
         Args:
             target (object): Creature who's health ponts will be decreased
         """        
-        if target.health >= 1:
+        if target.health >= 1 and self.is_alive:
             fire_attack = self.damage + random.randint(20,35)
             self.number_of_abilities += 1
             self.damage_dealt_by_abilities += fire_attack
+            target.health -= fire_attack
             print(self.name, "use special ability 'fireball' on", target.name, "and deals", fire_attack, "fire damage", "(ignores", target.name + "'s armor)")
             if target.health <= 0:
                target.dead()
@@ -151,7 +154,7 @@ class Statistics(object):
 class Inventory(object):
     """Class which manage all items in game like storing, adding, deleting"""    
 
-    Creature.inventory = {"Health_Potion":5, "Mana_Potion":3}
+    Creature.inventory = {"Health_Potion":5, "Mana_Potion":3, "Gold":100}
     
     def items_in_game():
         """Method which provide all items in game with description saved in 'all_items_game.csv'"""        
@@ -164,8 +167,7 @@ class Inventory(object):
             Creature (object): Specific Creature's inventory
         """        
         for key,value in creature.inventory.items():
-            print(key,value)
-        pass    
+            print(key,value) 
 
     def add_item(creature:object):
         """Method wchich allows to add specific items to Creature's inventory
@@ -175,43 +177,63 @@ class Inventory(object):
             Creature (object): Creature's who's inventory will be changed
         """        
         added_item = input("If You are not sure what to type, write 'check_items'.\nWhat item do You want to add?:") 
-        if added_item == "check_items":
-            all_items_game()
-        elif added_item not in all_items:
-            print("You cannot add this items, it is not in the game!")
+        if added_item == "check_items": all_items_game()
+        elif added_item not in all_items: print("You cannot add this items, it is not in the game!")
         else:
             creature.inventory[added_item] += 1
             print(added_item, "has been added to", creature.name, "'s inventory")
     
     def use_item(Creature:object):
         used_item = input("Which item You would like to use?:")
-
         if used_item == "Health_Potion" and "Health_Potion" in Creature.inventory and Creature.inventory[used_item] >= 0:
             Creature.inventory[used_item] -= 1
             Creature.health += 150
-        else: 
-            print("You cannot use this item")
+        else: print("You cannot use this item")
 
-#Main program - init monesters
+def adding_players():
+    monster_type = input("Choose type from: Demon and Vampire: ")
+    monster_variable = input("Pick name: ")
+    if monster_type == "Demon":
+        monster_variable = Demon(monster_variable,350,35,20,5,15)
+    elif monster_type == "Vampire":
+        monster_variable = Vampire(monster_variable,400,25,20,10,15)
+    monster_list.append(monster_variable)
+
 Demon1 = Demon("Krzsztof", 350, 35,20,5, 15)
 Demon2 = Demon("Andrzej", 350, 35,20,5, 15)
 Vampire1 = Vampire("Kamil", 400, 25, 20, 10, 15)
 
-#Attacks
-# Demon1.attack(Demon2)
-# Demon1.fireball(Demon2)
-# Demon1.roar(Demon2)
-# Vampire1.attack(Demon1)
-# Vampire1.consumption(Demon1)
+"Draft for game_is_active loop"
+# while game_is_active:
+# #     print(f'Available Monsters:\nDemon1\nDemon2\nVampire1\n')
+# #     print("Available commands:\nStatistics.current_stats(object)\nCreature.attack(target)\nDemon.fireball(target)\nDemon.roar(target)\nVampire.consumption(target)\nInventory.equipment(creature)\nInventory.add_item(creature)\nInventory.use_item(creature)\n")
+#     next_action = input("What is Your next action?")
+#     if next_action == "Statistics.current_stats(object)": 
+#         statistics_input = input("Which object would You like to check?")
+#         match statistics_input:
+#             case "Demon1":
+#                 Statistics.current_stats(Demon1)
+#             case "Demon2":
+#                 Statistics.current_stats(Demon2)
+#             case "Vampire1":
+#                 Statistics.current_stats(Vampire1)
+#     else: pass
 
-#Stats
-Statistics.current_stats(Vampire1)
-Statistics.current_stats(Demon1)
-Statistics.current_stats(Demon2)
+"Printing all methods assigned to object"
+# method_list = [metod for metod in dir(Demon1) if not metod.startswith("__")]
+# for row in method_list:
+#     print(row)
 
-##Inventory
-Inventory.equipment(Demon1)
-Inventory.add_item(Demon1)
-Inventory.equipment(Demon1)
-Inventory.use_item(Demon1)
-Statistics.current_stats(Demon1)
+"Manual commands"
+# Inventory.add_item(Demon1)
+# Inventory.equipment(Demon1)
+# Demon2.attack(Demon1)
+# Demon2.fireball(Demon1)
+# Statistics.current_stats(Demon1)
+adding_players()
+adding_players()
+print(monster_list)
+while game_is_active:
+    Statistics.current_stats(monster_list[0])
+    Statistics.current_stats(monster_list[1])
+    input("Zakończ Enterkiem")
