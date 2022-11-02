@@ -3,8 +3,10 @@ import random
 from all_items import all_items_game
 from all_items import all_items
 
+"Variables"
 game_is_active = True
-monster_list = []
+monster_list = [] 
+
 class Creature(object):
     """Basic model for creatures"""
 
@@ -199,41 +201,32 @@ def adding_players():
         monster_variable = Vampire(monster_variable,400,25,20,10,15)
     monster_list.append(monster_variable)
 
+"xxxxxxxxxxxx Maunal testing xxxxxxxxxxxx"
 Demon1 = Demon("Krzsztof", 350, 35,20,5, 15)
 Demon2 = Demon("Andrzej", 350, 35,20,5, 15)
 Vampire1 = Vampire("Kamil", 400, 25, 20, 10, 15)
 
-"Draft for game_is_active loop"
-# while game_is_active:
-# #     print(f'Available Monsters:\nDemon1\nDemon2\nVampire1\n')
-# #     print("Available commands:\nStatistics.current_stats(object)\nCreature.attack(target)\nDemon.fireball(target)\nDemon.roar(target)\nVampire.consumption(target)\nInventory.equipment(creature)\nInventory.add_item(creature)\nInventory.use_item(creature)\n")
-#     next_action = input("What is Your next action?")
-#     if next_action == "Statistics.current_stats(object)": 
-#         statistics_input = input("Which object would You like to check?")
-#         match statistics_input:
-#             case "Demon1":
-#                 Statistics.current_stats(Demon1)
-#             case "Demon2":
-#                 Statistics.current_stats(Demon2)
-#             case "Vampire1":
-#                 Statistics.current_stats(Vampire1)
-#     else: pass
+"Object Creation"
+Demon1 = Demon("Krystian", 350,15,15,15,15)
+Vampire1 = Vampire("Damian", 350,15,15,15,15)
 
-"Printing all methods assigned to object"
-# method_list = [metod for metod in dir(Demon1) if not metod.startswith("__")]
-# for row in method_list:
-#     print(row)
+"Testing monster creation in list"
+Demon2.attack(Demon1)
+Demon2.fireball(Demon1)
+Demon2.fireball(Demon1)
+Demon2.fireball(Demon1)
+Demon2.fireball(Demon1)
+Demon2.fireball(Demon1)
+Demon2.fireball(Demon1)
+Demon2.fireball(Demon1)
+Demon2.fireball(Demon1)
+Demon2.fireball(Demon1)
+Statistics.current_stats(Demon1)
+Statistics.current_stats(Vampire1)
+#Inventory.add_item(Demon1)
+Inventory.equipment(Demon1)
 
-"Manual commands"
-# Inventory.add_item(Demon1)
-# Inventory.equipment(Demon1)
-# Demon2.attack(Demon1)
-# Demon2.fireball(Demon1)
-# Statistics.current_stats(Demon1)
-adding_players()
-adding_players()
-print(monster_list)
-while game_is_active:
-    Statistics.current_stats(monster_list[0])
-    Statistics.current_stats(monster_list[1])
-    input("Zakończ Enterkiem")
+"Comprahension for attributes"
+all_attributes = [f'{name.capitalize()}:' for name in list(Creature.__init__.__code__.co_names)[:-3]+list(Creature.__dict__.keys())[2:7]]
+print(all_attributes)
+
