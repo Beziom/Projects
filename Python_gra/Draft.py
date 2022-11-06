@@ -21,3 +21,7 @@
 
 "Adding player"
 # adding_players()
+
+"Comprahension for attributes"
+# all_attributes = [f'{name.capitalize()}:' for name in list(Creature.__init__.__code__.co_names)[:-3]+list(Creature.__dict__.keys())[2:7]]
+# print(all_attributes)

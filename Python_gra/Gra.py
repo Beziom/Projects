@@ -49,6 +49,11 @@ class Creature(object):
             self.dead()
         else:
             print("Creature", self.name, "type", self.type, "has", self.health, "health points!")
+            
+    def heaven(self):
+        """Function to shortcut a statement that Creature cannot ust action after dead"""
+        if self.is_alive == 0:      
+            print(f"{self.name} cannot attack or use ability, he is dead!")
     
     def attack(self,target:object):
         """Creature's action which will decrease targets points of health
@@ -57,13 +62,15 @@ class Creature(object):
             target (object): Creature on who attack action will affect
         """                
         if target.health >= 1 and self.is_alive:
-            target.health = target.health -self.damage + target.defense
             self.number_of_attacks += 1 # Is it the best idea to add statistic solution here (or it should be done in classs)
+            target.health = target.health -self.damage + target.defense
             self.damage_dealt_by_attacks += self.damage - target.defense
             print(self.name, "attacks", target.name, "and deals", self.damage - self.defense, "damage", "(" + str(self.defense), "blocked)")
 
             if target.health <= 0:
                target.dead()
+               
+        self.heaven()
 
     def block(self, damage_taken):
         pass
@@ -84,13 +91,20 @@ class Demon(Creature):
             target (object): Creature who's health ponts will be decreased
         """        
         if target.health >= 1 and self.is_alive:
-            fire_attack = self.damage + random.randint(20,35)
-            self.number_of_abilities += 1
-            self.damage_dealt_by_abilities += fire_attack
-            target.health -= fire_attack
-            print(self.name, "use special ability 'fireball' on", target.name, "and deals", fire_attack, "fire damage", "(ignores", target.name + "'s armor)")
-            if target.health <= 0:
-               target.dead()
+            if self.mana >= 1:
+                fire_attack = self.damage + random.randint(20,35)
+                self.number_of_abilities += 1
+                self.mana -= 1
+                self.damage_dealt_by_abilities += fire_attack
+                target.health -= fire_attack
+                print(self.name, "use special ability 'fireball' on", target.name, "and deals", fire_attack, "fire damage", "(ignores", target.name + "'s armor)")
+            else:
+                print(f"{self.name} is out of mana!")
+                
+        if target.health <= 0:
+            target.dead()
+               
+        self.heaven()
 
     def roar(self, target:object):
         """Skill that allow Demon to decease target's armor by 5 points
@@ -98,10 +112,12 @@ class Demon(Creature):
         Args:
             target (object): Creature who's armor will be decreased
         """           
-        target.defense -= 5
-        self.number_of_abilities += 1 # Is it the best idea to add statistic solution here (or it should be done in classs)
-        print(self.name, "use special ability 'roar' on", target.name, "and reduce it's defense by 5 points")
-
+        if self.health <= 1 and self.is_alive == True:
+            target.defense -= 5
+            self.number_of_abilities += 1 # Is it the best idea to add statistic solution here (or it should be done in classs)
+            print(self.name, "use special ability 'roar' on", target.name, "and reduce it's defense by 5 points")
+        
+        self.heaven()
 class Vampire(Creature):
     """_Basic model fo creature Vampire"""   
     
@@ -116,6 +132,7 @@ class Vampire(Creature):
         """        
         super().attack(target)
         self.health += self.damage - target.defense
+        print(f"{self.name} has restored {self.damage - target.defense} health points!")
 
     def consumption(self, target:object):
         """Ability which ignores target's armor and steal his health points
@@ -124,13 +141,20 @@ class Vampire(Creature):
             target (object): Creature which health points will be decreased and stolen
         """        
         life_steal_damage = random.randint(10,15)
-        if target.health <= life_steal_damage:
-               target.dead()
-        else:
-            target.health -= life_steal_damage
-            self.health += life_steal_damage
-            print(self.name, "use special ability 'consumption' on", target.name, "and steals", life_steal_damage, "health points from", target.name)
-
+        
+        if target.health >= 1 and self.is_alive:
+            if self.mana >= 1:
+                self.mana -= 1
+                target.health -= life_steal_damage
+                self.health += life_steal_damage
+                print(self.name, "use special ability 'consumption' on", target.name, "and steals", life_steal_damage, "health points from", target.name)
+            else:
+                print(f"{self.name} is out of mana!")
+                
+        if target.health <= 0:
+            target.dead()    
+            
+        self.heaven()
 class Statistics(object):
     """Class which gathers all object's data"""
 
@@ -189,7 +213,10 @@ class Inventory(object):
         used_item = input("Which item You would like to use?:")
         if used_item == "Health_Potion" and "Health_Potion" in Creature.inventory and Creature.inventory[used_item] >= 0:
             Creature.inventory[used_item] -= 1
-            Creature.health += 150
+            Creature.health += 250
+        if used_item == "Mana_Potion" and "Mana_Potion" in Creature.inventory and Creature.inventory[used_item] >= 0:
+            Creature.inventory[used_item] -= 1
+            Creature.mana += 10
         else: print("You cannot use this item")
 
 def adding_players():
@@ -202,31 +229,28 @@ def adding_players():
     monster_list.append(monster_variable)
 
 "xxxxxxxxxxxx Maunal testing xxxxxxxxxxxx"
-Demon1 = Demon("Krzsztof", 350, 35,20,5, 15)
+Demon1 = Demon("Krzsztof", 500, 35,20,5, 15)
 Demon2 = Demon("Andrzej", 350, 35,20,5, 15)
 Vampire1 = Vampire("Kamil", 400, 25, 20, 10, 15)
 
-"Object Creation"
-Demon1 = Demon("Krystian", 350,15,15,15,15)
-Vampire1 = Vampire("Damian", 350,15,15,15,15)
-
 "Testing monster creation in list"
-Demon2.attack(Demon1)
-Demon2.fireball(Demon1)
-Demon2.fireball(Demon1)
-Demon2.fireball(Demon1)
-Demon2.fireball(Demon1)
-Demon2.fireball(Demon1)
-Demon2.fireball(Demon1)
-Demon2.fireball(Demon1)
-Demon2.fireball(Demon1)
-Demon2.fireball(Demon1)
-Statistics.current_stats(Demon1)
-Statistics.current_stats(Vampire1)
-#Inventory.add_item(Demon1)
-Inventory.equipment(Demon1)
 
-"Comprahension for attributes"
-all_attributes = [f'{name.capitalize()}:' for name in list(Creature.__init__.__code__.co_names)[:-3]+list(Creature.__dict__.keys())[2:7]]
-print(all_attributes)
+for i in range(16):
+    Vampire1.consumption(Demon1)
+Vampire1.consumption(Demon2)
+Vampire1.attack(Demon2)
+
+for i in range(7):
+    Demon2.fireball(Vampire1)
+Demon1.fireball(Demon2)
+Demon1.roar(Demon2)
+
+"Statistics"
+# Statistics.current_stats(Demon1)
+Statistics.current_stats(Vampire1)
+Inventory.use_item(Vampire1)
+Statistics.current_stats(Vampire1)
+"Inventory adding"
+# Inventory.add_item(Demon1)
+# Inventory.equipment(Demon1)
 
