@@ -228,6 +228,19 @@ def adding_players():
         monster_variable = Vampire(monster_variable,400,25,20,10,15)
     monster_list.append(monster_variable)
 
+def display_actions(display_class:object):
+    """Function which print all available methods added by programer to class
+
+    Args:
+        display_class (object: A class to check
+    """    
+    
+    method_list = [metod for metod in dir(display_class) if not metod.startswith("__") and not metod.startswith("number") and not metod.startswith("damage")]
+    print(f"{display_class.__name__}'s methods are:", end = " ")
+    for row in method_list:
+        print("|",row,"|", end = " ")
+    print()
+    
 "xxxxxxxxxxxx Maunal testing xxxxxxxxxxxx"
 Demon1 = Demon("Krzsztof", 500, 35,20,5, 15)
 Demon2 = Demon("Andrzej", 350, 35,20,5, 15)
@@ -254,3 +267,6 @@ Statistics.current_stats(Vampire1)
 # Inventory.add_item(Demon1)
 # Inventory.equipment(Demon1)
 
+display_actions(Creature)
+display_actions(Demon)
+display_actions(Vampire)
