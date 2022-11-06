@@ -1,0 +1,35 @@
+[33mcommit 2dd6241a8d2afff82e6d47f4425b2de736d0b3c5[m[33m ([m[1;36mHEAD -> [m[1;32mMainProject[m[33m)[m
+Author: Beziom <Beziom@gmail.com>
+Date:   Thu Sep 1 00:09:50 2022 +0200
+
+    Dodanie nowych statystyk zliczających liczbę oraz wartości zadanych obrażeń z ataków oraz umiejętności
+
+[33mcommit 99e5f3eb604ad6d08c46241c19fb6e1ea1888b71[m
+Author: Beziom <Beziom@gmail.com>
+Date:   Wed Aug 31 00:26:26 2022 +0200
+
+    Ponowna analiza kodu po powrocie - zapisanie pomysłów na rozwój
+
+[33mcommit 217a4bbd2f6b08a0a8ed6499cb7c8c4b65b4ad53[m
+Author: Beziom <Beziom@gmail.com>
+Date:   Tue Aug 9 23:58:07 2022 +0200
+
+    Dodanie klasy statystyk oraz opisanie 2 metod
+
+[33mcommit 1325ea018d437f014653a0b9cf452d564d415705[m
+Author: Beziom <Beziom@gmail.com>
+Date:   Wed Jul 20 23:37:22 2022 +0200
+
+    Dodanie umiejętności fireball, roar, oraz utworzenie pierwszego dekoratoa
+
+[33mcommit 9a6a6b7f6467c504da1529f81efdb8a36252e973[m
+Author: Beziom <Beziom@gmail.com>
+Date:   Tue Jul 19 23:40:08 2022 +0200
+
+    Poprawa metody 'attack' oraz dopisanie docstringow
+
+[33mcommit 0d2f4d94bc140b40977474fc4f8df6d9e53ff149[m[33m ([m[1;32mDraft[m[33m)[m
+Author: Beziom <Beziom@gmail.com>
+Date:   Tue Jul 19 21:45:06 2022 +0200
+
+    Dodanie aktualnego stanu gry
