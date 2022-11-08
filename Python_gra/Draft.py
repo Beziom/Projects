@@ -14,14 +14,6 @@
 #                 Statistics.current_stats(Vampire1)
 #     else: pass
 
-"Printing all methods assigned to object"
-# method_list = [metod for metod in dir(Demon1) if not metod.startswith("__")]
-# for row in method_list:
-#     print(row)
-
-"Adding player"
-# adding_players()
-
 "Comprahension for attributes"
 # all_attributes = [f'{name.capitalize()}:' for name in list(Creature.__init__.__code__.co_names)[:-3]+list(Creature.__dict__.keys())[2:7]]
 # print(all_attributes)
