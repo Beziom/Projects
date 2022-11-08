@@ -193,7 +193,9 @@ class Inventory(object):
             Creature (object): Specific Creature's inventory
         """        
         for key,value in creature.inventory.items():
-            print(key,value) 
+            print(f'ITEM: {key}')
+            print(f'DESCRIPTION: {value}')
+            print() 
 
     def add_item(creature:object):
         """Method wchich allows to add specific items to Creature's inventory
@@ -209,12 +211,11 @@ class Inventory(object):
             creature.inventory[added_item] += 1
             print(added_item, "has been added to", creature.name, "'s inventory")
     
-    def use_item(Creature:object):
-        used_item = input("Which item You would like to use?:")
+    def use_item(used_item:str,Creature:object):
         if used_item == "Health_Potion" and "Health_Potion" in Creature.inventory and Creature.inventory[used_item] >= 0:
             Creature.inventory[used_item] -= 1
             Creature.health += 250
-        if used_item == "Mana_Potion" and "Mana_Potion" in Creature.inventory and Creature.inventory[used_item] >= 0:
+        elif used_item == "Mana_Potion" and "Mana_Potion" in Creature.inventory and Creature.inventory[used_item] >= 0:
             Creature.inventory[used_item] -= 1
             Creature.mana += 10
         else: print("You cannot use this item")
@@ -246,27 +247,34 @@ Demon1 = Demon("Krzsztof", 500, 35,20,5, 15)
 Demon2 = Demon("Andrzej", 350, 35,20,5, 15)
 Vampire1 = Vampire("Kamil", 400, 25, 20, 10, 15)
 
-"Testing monster creation in list"
-
+"Attacks"
 for i in range(16):
     Vampire1.consumption(Demon1)
+    
 Vampire1.consumption(Demon2)
 Vampire1.attack(Demon2)
 
-for i in range(7):
+for i in range(10):
     Demon2.fireball(Vampire1)
-Demon1.fireball(Demon2)
-Demon1.roar(Demon2)
 
-"Statistics"
-# Statistics.current_stats(Demon1)
+"Statistics and inventory checking"
 Statistics.current_stats(Vampire1)
-Inventory.use_item(Vampire1)
+Inventory.items_in_game()
+Inventory.use_item("Health_Potion",Vampire1)
 Statistics.current_stats(Vampire1)
-"Inventory adding"
-# Inventory.add_item(Demon1)
-# Inventory.equipment(Demon1)
 
 display_actions(Creature)
 display_actions(Demon)
 display_actions(Vampire)
+
+#To do:
+"Urgent"
+#Fix Inventory for all creatures (if someone is using Health Potion everyone loses 1 piece)
+#Fix Importing module ,,All_items_game" -comprahension list?
+#Make dead monster unavailable to add/use items
+#Delete movement_speed due to concept change (turn's game)
+#Consider new method for possibility for double attack (2x attack when monster speed of sum every turn is 2x bigger than target's)
+
+"Big plans"
+#Create ongoin loop for the game (quit options)
+#Create map and GUI for game ()
