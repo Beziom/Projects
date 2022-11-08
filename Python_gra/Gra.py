@@ -278,3 +278,7 @@ display_actions(Vampire)
 "Big plans"
 #Create ongoin loop for the game (quit options)
 #Create map and GUI for game ()
+
+#Diamond Problem
+#PyTest
+#Wzorce projektowe - https://refactoring.guru/pl/design-patterns
