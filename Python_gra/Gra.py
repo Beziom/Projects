@@ -26,7 +26,7 @@ class Creature(object):
             damage (int): Number of health point which will be decresed from target
             defense (int): How many damage creature will absorb
             movement_speed (int): Number of spaces which creature can step on in 1 tour
-            mana (int): Source for using abilities
+            mana (int): Source for using abillities
         """                      
         self.type = type
         self.name = name
