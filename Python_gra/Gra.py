@@ -83,7 +83,8 @@ class Demon(Creature):
 
     def __init__(self, name:str, health:int, damage:int, defense:int, movement_speed:int, mana:int):
         super().__init__(type = "Demon", name = name, health = health, damage= damage, defense = defense, movement_speed = movement_speed, mana = mana)
-
+        self.inventory = {"Health_Potion":5, "Mana_Potion":3, "Gold":100}
+        
     def fireball(self, target:object):
         """Skills that deals fire damage to target which ingores target's armor
 
@@ -123,7 +124,8 @@ class Vampire(Creature):
     
     def __init__(self, name: str, health: int, damage: int, defense: int, movement_speed: int, mana:int):
         super().__init__(type = "Vampire", name = name, health = health, damage = damage, defense = defense, movement_speed = movement_speed, mana = mana)
-    
+        self.inventory = {"Health_Potion":5, "Mana_Potion":3, "Gold":100}
+        
     def attack(self, target: object):
         """Inherited method from Creature with lifesteal effect
 
@@ -180,8 +182,6 @@ class Statistics(object):
 class Inventory(object):
     """Class which manage all items in game like storing, adding, deleting"""    
 
-    Creature.inventory = {"Health_Potion":5, "Mana_Potion":3, "Gold":100}
-    
     def items_in_game():
         """Method which provide all items in game with description saved in 'all_items_game.csv'"""        
         all_items_game()
@@ -204,22 +204,29 @@ class Inventory(object):
         Args:
             Creature (object): Creature's who's inventory will be changed
         """        
-        added_item = input("If You are not sure what to type, write 'check_items'.\nWhat item do You want to add?:") 
+        added_item = input(f"If You are not sure what to type, write 'check_items'.\nWhat item do You want to add to {creature.name}'s inventory?:") 
         if added_item == "check_items": all_items_game()
         elif added_item not in all_items: print("You cannot add this items, it is not in the game!")
         else:
-            creature.inventory[added_item] += 1
-            print(added_item, "has been added to", creature.name, "'s inventory")
-    
-    def use_item(used_item:str,Creature:object):
-        if used_item == "Health_Potion" and "Health_Potion" in Creature.inventory and Creature.inventory[used_item] >= 0:
-            Creature.inventory[used_item] -= 1
-            Creature.health += 250
-        elif used_item == "Mana_Potion" and "Mana_Potion" in Creature.inventory and Creature.inventory[used_item] >= 0:
-            Creature.inventory[used_item] -= 1
-            Creature.mana += 10
-        else: print("You cannot use this item")
-
+            if creature.health >= 1 and creature.is_alive:
+                creature.inventory[added_item] += 1
+                print(added_item, "has been added to", creature.name, "'s inventory")
+            else:
+                creature.heaven()
+                
+    def use_item(used_item:str,creature:object):
+        
+        if creature.health >= 1 and creature.is_alive:
+            if used_item == "Health_Potion" and "Health_Potion" in creature.inventory and creature.inventory[used_item] >= 0:
+                creature.inventory[used_item] -= 1
+                creature.health += 250
+            elif used_item == "Mana_Potion" and "Mana_Potion" in creature.inventory and creature.inventory[used_item] >= 0:
+                creature.inventory[used_item] -= 1
+                creature.mana += 10
+            else: print("You cannot use this item")
+        else:
+            creature.heaven()
+            
 def adding_players():
     monster_type = input("Choose type from: Demon and Vampire: ")
     monster_variable = input("Pick name: ")
@@ -247,31 +254,42 @@ Demon1 = Demon("Krzsztof", 500, 35,20,5, 15)
 Demon2 = Demon("Andrzej", 350, 35,20,5, 15)
 Vampire1 = Vampire("Kamil", 400, 25, 20, 10, 15)
 
-"Attacks"
-for i in range(16):
-    Vampire1.consumption(Demon1)
-    
-Vampire1.consumption(Demon2)
-Vampire1.attack(Demon2)
-
 for i in range(10):
-    Demon2.fireball(Vampire1)
+    Demon2.fireball(Demon1)
 
-"Statistics and inventory checking"
-Statistics.current_stats(Vampire1)
-Inventory.items_in_game()
-Inventory.use_item("Health_Potion",Vampire1)
-Statistics.current_stats(Vampire1)
+"Fixed Potions"
+Inventory.add_item(Demon1)
+Inventory.equipment(Demon1)
+Inventory.add_item(Demon2)
+Inventory.equipment(Demon2)
 
-display_actions(Creature)
-display_actions(Demon)
-display_actions(Vampire)
+# "Attacks"
+# for i in range(16):
+#     Vampire1.consumption(Demon1)
+    
+# Vampire1.consumption(Demon2)
+# Vampire1.attack(Demon2)
+
+# "Statistics and inventory checking"
+# Statistics.current_stats(Vampire1)
+# Inventory.items_in_game()
+# Inventory.use_item("Health_Potion",Vampire1)
+# Statistics.current_stats(Vampire1)
+
+# display_actions(Creature)
+# display_actions(Demon)
+# display_actions(Vampire)
+
+# print(Demon1.is_alive)
+# print(Demon2.is_alive)
+# print(Vampire1.is_alive)
 
 #To do:
+
 "Urgent"
-#Fix Inventory for all creatures (if someone is using Health Potion everyone loses 1 piece)
-#Fix Importing module ,,All_items_game" -comprahension list?
-#Make dead monster unavailable to add/use items
+#Fix Inventory for all creatures (if someone is using Health Potion everyone loses 1 piece) FIXED
+#Fix Importing module ,,All_items_game" -comprahension list? FIXED
+#Make dead monster unavailable to add/use items FIXED
 #Delete movement_speed due to concept change (turn's game)
 #Consider new method for possibility for double attack (2x attack when monster speed of sum every turn is 2x bigger than target's)
 
